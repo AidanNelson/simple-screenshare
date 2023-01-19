@@ -1,3 +1,8 @@
+html,
+body {
+  font-family: "Sofia Sans", sans-serif;
+}
+
 #mainContainer {
   width: 100vw;
   height: 100vh;
@@ -6,6 +11,9 @@
   position: absolute;
   top: 0px;
   left: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   /* background */
   background: linear-gradient(
@@ -15,10 +23,20 @@
   );
 }
 
-#videoShare {
+#videoContainer {
   position: absolute;
   width: 90vw;
   height: 90vh;
   top: 5vh;
   left: 5vw;
+}
+
+#videoContainer video {
+  width: 100%;
+  height: 100%;
+}
+
+h3 {
+  font-size: 2em;
+  text-align: center;
 }
