@@ -1,0 +1,24 @@
+#mainContainer {
+  width: 100vw;
+  height: 100vh;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+
+  /* background */
+  background: linear-gradient(
+    8deg,
+    rgba(255, 1, 1, 1) 0%,
+    rgba(0, 212, 255, 1) 100%
+  );
+}
+
+#videoShare {
+  position: absolute;
+  width: 90vw;
+  height: 90vh;
+  top: 5vh;
+  left: 5vw;
+}
