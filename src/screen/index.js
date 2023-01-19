@@ -10,6 +10,9 @@ socket.on("connect", () => {
 socket.on("ip", (data) => {
   ipAddress = data;
   console.log("ipAddress: ", ipAddress);
+  document.getElementById(
+    "instructions"
+  ).innerText = `To share your screen point your browser window to \n https://${ipAddress}:3000`;
 });
 
 socket.on("signal", (to, from, data) => {
@@ -63,7 +66,8 @@ socket.on("intro", (otherSocketId) => {
 
     const videoStream = new MediaStream([videoTrack]);
 
-    const videoElement = document.getElementById("videoShare");
+    const videoElement = document.createElement("video");
+    videoElement.id = "videoEl";
 
     if ("srcObject" in videoElement) {
       videoElement.srcObject = videoStream;
@@ -72,11 +76,17 @@ socket.on("intro", (otherSocketId) => {
     }
 
     videoElement.play();
+    document.getElementById("videoContainer").appendChild(videoElement);
   });
 
   peerConnection.on("close", () => {
     console.log("Got close event");
-    // Should probably remove from the array of simplepeers
+
+    // const videoElement = document.getElementById("videoEl");
+
+    // if (videoElement) {
+    //   document.getElementById("videoContainer").removeChild(videoElement);
+    // }
   });
 
   peerConnection.on("error", (err) => {

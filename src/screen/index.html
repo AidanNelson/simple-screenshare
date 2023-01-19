@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta
+    <!-- <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self' *; script-src 'self' *; style-src 'self' 'unsafe-inline'"
-    />
+    /> -->
     <link href="./styles.css" rel="stylesheet" />
     <title>Screenshare</title>
   </head>
@@ -24,15 +24,22 @@
       referrerpolicy="no-referrer"
     ></script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,500;0,700;1,500;1,700&display=swap"
+      rel="stylesheet"
+    />
+
     <script src="index.js"></script>
 
     <div id="mainContainer">
       <div>
-        <h3>
+        <h3 id="instructions">
           To share screen, point your browser window to https://127.0.0.1:3000
         </h3>
       </div>
-      <video id="videoShare"></video>
+      <div id="videoContainer"></div>
     </div>
   </body>
 </html>
