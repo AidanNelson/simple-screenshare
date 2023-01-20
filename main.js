@@ -2,6 +2,9 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 
+// ignore bad certs
+app.commandLine.appendSwitch("ignore-certificate-errors");
+
 //
 const SignalingServer = require("./signalingServer");
 
