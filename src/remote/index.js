@@ -39,7 +39,15 @@ socket.on("intro", (otherSocketId) => {
   const isInitiator = true;
   // console.log("initiating?", isInitiator);
 
-  const peerConnection = new SimplePeer({ initiator: isInitiator });
+  const sdpTransformFunc = (sdp) => {
+    console.log(sdp);
+    return sdp;
+  };
+
+  const peerConnection = new SimplePeer({
+    initiator: isInitiator,
+    sdpTransform: sdpTransformFunc,
+  });
   // simplepeer generates signals which need to be sent across socket
   peerConnection.on("signal", (data) => {
     socket.emit("signal", otherSocketId, socket.id, data);
