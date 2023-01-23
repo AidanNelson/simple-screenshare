@@ -10,7 +10,10 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
-    "appId": "com.hello.simple-screenshare"
+    "appId": "com.hello.simple-screenshare",
+    "linux": {
+      "target": "AppImage"
+    }
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
