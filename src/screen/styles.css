@@ -26,10 +26,10 @@ body {
 
 .active {
   /* position: absolute; */
-  width: 90vw;
-  height: 90vh;
-  top: 5vh;
-  left: 5vw;
+  max-width: 90vw;
+  max-height: 90vh;
+  /* top: 5vh; */
+  /* left: 5vw; */
 }
 
 .inactive {
@@ -45,4 +45,10 @@ body {
 h3 {
   font-size: 2em;
   text-align: center;
+  margin: 0px;
+  padding: 1em;
+}
+
+.activeInstructions {
+  font-size: 1em !important;
 }

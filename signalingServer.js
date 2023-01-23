@@ -57,6 +57,10 @@ class SignalingServer {
       socket.on("doneDisplayingStream", (data) => {
         socket.broadcast.emit("doneDisplayingStream", { id: data.id });
       });
+
+      socket.on("disconnect", () => {
+        socket.broadcast.emit("peerDisconnect", { id: socket.id });
+      });
     });
   }
 }

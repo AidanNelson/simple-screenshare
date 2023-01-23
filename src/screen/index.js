@@ -1,6 +1,7 @@
 const peers = {};
 const socket = io("https://localhost:3000");
 const videoContainer = document.getElementById("videoContainer");
+const instructionsEl = document.getElementById("instructions");
 let currentStreamSourceId = 0;
 let ipAddress = "127.0.0.1";
 let currentStream = null;
@@ -9,6 +10,8 @@ const clearCurrentVideo = () => {
   videoContainer.innerHTML = "";
   videoContainer.classList.remove("active");
   videoContainer.classList.add("inactive");
+
+  instructionsEl.classList.remove("activeInstructions");
 
   socket.emit("doneDisplayingStream", { id: currentStreamSourceId });
 
@@ -21,6 +24,12 @@ socket.on("connect", () => {
   console.log("Socket Connected.");
 });
 
+socket.on("peerDisconnect", (data) => {
+  if (data.id === currentStreamSourceId) {
+    clearCurrentVideo();
+  }
+});
+
 socket.on("streamEnded", (data) => {
   console.log("streamended: ", data);
   if (data.id === currentStreamSourceId) {
@@ -31,9 +40,7 @@ socket.on("streamEnded", (data) => {
 socket.on("ip", (data) => {
   ipAddress = data;
   console.log("ipAddress: ", ipAddress);
-  document.getElementById(
-    "instructions"
-  ).innerText = `To share your screen point your browser window to \n https://${ipAddress}:3000`;
+  instructionsEl.innerText = `To share your screen point your browser window to https://${ipAddress}:3000`;
 });
 
 socket.on("signal", (to, from, data) => {
@@ -85,6 +92,8 @@ socket.on("intro", (otherSocketId) => {
     }
     currentStream = stream;
 
+    instructionsEl.classList.add("activeInstructions");
+
     // const videoTrack = stream.getVideoTracks()[0];
     // const audioTrack = stream.getAudioTracks()[0];
     // console.log(audioTrack);
@@ -113,6 +122,7 @@ socket.on("intro", (otherSocketId) => {
 
   peerConnection.on("close", () => {
     console.log("Got close event");
+    clearCurrentVideo();
 
     // const videoElement = document.getElementById("videoEl");
 
