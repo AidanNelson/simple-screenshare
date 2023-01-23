@@ -1,7 +1,7 @@
 {
-  "name": "electron-quick-start",
+  "name": "simple-screenshare",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "Turn a computer into a device to accept a screenshare.",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
