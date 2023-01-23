@@ -9,7 +9,8 @@ app.commandLine.appendSwitch("ignore-certificate-errors");
 const SignalingServer = require("./signalingServer");
 
 function createWindow() {
-  const signalingServer = new SignalingServer();
+  const rootPath = app.getAppPath();
+  const signalingServer = new SignalingServer(rootPath);
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,

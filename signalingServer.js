@@ -5,7 +5,8 @@ const ip = require("ip");
 const devcert = require("devcert");
 
 class SignalingServer {
-  constructor() {
+  constructor(rootPath) {
+    this.rootPath = rootPath;
     this.init();
   }
 
@@ -17,8 +18,8 @@ class SignalingServer {
 
     // this.io = new Server(this.server);
 
-    console.log(process.cwd() + "/src/remote");
-    this.app.use(express.static(process.cwd() + "/src/remote/"));
+    console.log(this.rootPath + "/src/remote");
+    this.app.use(express.static(this.rootPath + "/src/remote/"));
 
     this.server.listen(3000, () => {
       console.log("listening on *:3000");
