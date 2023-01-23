@@ -49,6 +49,14 @@ class SignalingServer {
       socket.on("signal", (to, from, data) => {
         this.io.to(to).emit("signal", to, from, data);
       });
+
+      socket.on("streamEnded", () => {
+        socket.broadcast.emit("streamEnded", { id: socket.id });
+      });
+
+      socket.on("doneDisplayingStream", (data) => {
+        socket.broadcast.emit("doneDisplayingStream", { id: data.id });
+      });
     });
   }
 }

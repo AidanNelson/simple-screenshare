@@ -1,8 +1,23 @@
 const peers = {};
 const socket = io();
+const videoElement = document.getElementById("localVideo");
+
+let currentStream = null;
 
 socket.on("connect", () => {
   console.log("Socket connected!");
+});
+
+socket.on("doneDisplayingStream", (data) => {
+  if (data.id === socket.id && currentStream) {
+    console.log("screen is done displaying stream (maybe someone took over).");
+    let tracks = videoElement.srcObject.getTracks();
+
+    tracks.forEach((track) => track.stop());
+    videoElement.srcObject = null;
+
+    currentStream = null;
+  }
 });
 
 socket.on("signal", (to, from, data) => {
@@ -77,19 +92,24 @@ socket.on("intro", (otherSocketId) => {
 });
 
 function gotStream(stream) {
-  localCam = stream; // make stream available to console
+  currentStream = stream; // make stream available to console
   console.log(stream);
 
-  const videoTrack = localCam.getVideoTracks()[0];
-  const audioTrack = localCam.getAudioTracks()[0];
-  console.log(audioTrack);
-  console.log(videoTrack);
+  const videoTrack = currentStream.getVideoTracks()[0];
+  // const audioTrack = currentStream.getAudioTracks()[0];
+  // console.log(audioTrack);
+  // console.log("adding video track end listener");
 
-  let videoStream = new MediaStream([videoTrack]);
+  videoTrack.addEventListener("ended", () => {
+    console.log("video track ended!");
+    socket.emit("streamEnded"); // we'll use this for video and audio together
+  });
+
+  // let videoStream = new MediaStream([videoTrack]);
   if ("srcObject" in videoElement) {
-    videoElement.srcObject = videoStream;
+    videoElement.srcObject = currentStream;
   } else {
-    videoElement.src = window.URL.createObjectURL(videoStream);
+    videoElement.src = window.URL.createObjectURL(currentStream);
   }
 
   videoElement.play();
@@ -100,8 +120,6 @@ function gotStream(stream) {
 
 //*//*//*//*//*//*//*//*//*//*//*//*//*//*//*//*//*//*//
 // user media
-let localCam;
-const videoElement = document.getElementById("localVideo");
 
 document.getElementById("startBroadcast").addEventListener(
   "click",
