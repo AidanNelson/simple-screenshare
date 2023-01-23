@@ -1,10 +1,31 @@
 const peers = {};
 const socket = io("https://localhost:3000");
+const videoContainer = document.getElementById("videoContainer");
+let currentStreamSourceId = 0;
 let ipAddress = "127.0.0.1";
+let currentStream = null;
+
+const clearCurrentVideo = () => {
+  videoContainer.innerHTML = "";
+  videoContainer.classList.remove("active");
+  videoContainer.classList.add("inactive");
+
+  socket.emit("doneDisplayingStream", { id: currentStreamSourceId });
+
+  currentStream = null;
+  currentStreamSourceId = 0;
+};
 
 socket.on("connect", () => {
   // eslint-disable-next-line no-console
   console.log("Socket Connected.");
+});
+
+socket.on("streamEnded", (data) => {
+  console.log("streamended: ", data);
+  if (data.id === currentStreamSourceId) {
+    clearCurrentVideo();
+  }
 });
 
 socket.on("ip", (data) => {
@@ -59,24 +80,35 @@ socket.on("intro", (otherSocketId) => {
   peerConnection.on("stream", (stream) => {
     console.log("Got Stream!", stream);
 
-    const videoTrack = stream.getVideoTracks()[0];
-    const audioTrack = stream.getAudioTracks()[0];
-    console.log(audioTrack);
-    console.log(videoTrack);
+    if (currentStream) {
+      clearCurrentVideo();
+    }
+    currentStream = stream;
 
-    const videoStream = new MediaStream([videoTrack]);
+    // const videoTrack = stream.getVideoTracks()[0];
+    // const audioTrack = stream.getAudioTracks()[0];
+    // console.log(audioTrack);
+    // console.log(videoTrack);
+
+    // const videoStream = new MediaStream([videoTrack]);
 
     const videoElement = document.createElement("video");
     videoElement.id = "videoEl";
 
     if ("srcObject" in videoElement) {
-      videoElement.srcObject = videoStream;
+      videoElement.srcObject = stream;
     } else {
-      videoElement.src = window.URL.createObjectURL(videoStream);
+      videoElement.src = window.URL.createObjectURL(stream);
     }
 
     videoElement.play();
-    document.getElementById("videoContainer").appendChild(videoElement);
+    currentStreamSourceId = otherSocketId;
+
+    // videoContainer.innerHTML = "";
+
+    videoContainer.appendChild(videoElement);
+    videoContainer.classList.add("active");
+    videoContainer.classList.remove("inactive");
   });
 
   peerConnection.on("close", () => {
