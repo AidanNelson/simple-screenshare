@@ -25,11 +25,8 @@ body {
 }
 
 .active {
-  /* position: absolute; */
-  max-width: 90vw;
-  max-height: 90vh;
-  /* top: 5vh; */
-  /* left: 5vw; */
+  width: 90vw;
+  height: 90vh;
 }
 
 .inactive {
@@ -38,6 +35,7 @@ body {
 }
 
 #videoContainer video {
+  object-fit: contain;
   width: 100%;
   height: 100%;
 }
