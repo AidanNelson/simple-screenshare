@@ -103,9 +103,12 @@ function gotStream(stream) {
   videoTrack.addEventListener("ended", () => {
     console.log("video track ended!");
     socket.emit("streamEnded"); // we'll use this for video and audio together
+
+    // if someone has pressed the browser stopshare button (instead of the one on the page)
+    startButton.classList.remove("hidden");
+    stopButton.classList.add("hidden");
   });
 
-  // let videoStream = new MediaStream([videoTrack]);
   if ("srcObject" in videoElement) {
     videoElement.srcObject = currentStream;
   } else {
@@ -118,10 +121,46 @@ function gotStream(stream) {
   return navigator.mediaDevices.enumerateDevices();
 }
 
+function stopBroadcast() {
+  if (currentStream) {
+    for (let id in peers) {
+      if (peers[id]) {
+        peers[id].removeStream(currentStream);
+      }
+    }
+
+    if ("srcObject" in videoElement) {
+      videoElement.srcObject = null;
+    } else {
+      videoElement.src = "";
+    }
+
+    currentStream.getTracks().forEach((track) => {
+      track.stop();
+    });
+
+    socket.emit("streamEnded"); // we'll use this for video and audio together
+
+    startButton.classList.remove("hidden");
+    stopButton.classList.add("hidden");
+  }
+}
+
 //*//*//*//*//*//*//*//*//*//*//*//*//*//*//*//*//*//*//
 // user media
 
-document.getElementById("startBroadcast").addEventListener(
+const startButton = document.getElementById("startBroadcast");
+const stopButton = document.getElementById("stopBroadcast");
+
+stopButton.addEventListener(
+  "click",
+  () => {
+    stopBroadcast();
+  },
+  false
+);
+
+startButton.addEventListener(
   "click",
   () => {
     startBroadcast();
@@ -133,6 +172,9 @@ async function startBroadcast() {
   console.log("broadcasting!");
   let stream = await navigator.mediaDevices.getDisplayMedia();
   gotStream(stream);
+
+  startButton.classList.add("hidden");
+  stopButton.classList.remove("hidden");
 
   // eslint-disable-next-line prefer-const
   for (let id in peers) {
