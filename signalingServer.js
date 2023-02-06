@@ -21,8 +21,8 @@ class SignalingServer {
     console.log(this.rootPath + "/src/remote");
     this.app.use(express.static(this.rootPath + "/src/remote/"));
 
-    this.server.listen(3000, () => {
-      console.log("listening on *:3000");
+    this.server.listen(443, () => {
+      console.log("listening on *:443");
     });
 
     this.io = io();
