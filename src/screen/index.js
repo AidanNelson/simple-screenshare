@@ -1,5 +1,5 @@
 const peers = {};
-const socket = io("https://localhost");
+const socket = io("https://localhost:3000");
 const videoContainer = document.getElementById("videoContainer");
 const instructionsEl = document.getElementById("instructions");
 let currentStreamSourceId = 0;
@@ -40,7 +40,7 @@ socket.on("streamEnded", (data) => {
 socket.on("ip", (data) => {
   ipAddress = data;
   console.log("ipAddress: ", ipAddress);
-  instructionsEl.innerText = `To share your screen point your browser window to https://${ipAddress}`;
+  instructionsEl.innerText = `To share your screen point your browser window to https://${ipAddress}:3000`;
 });
 
 socket.on("signal", (to, from, data) => {
