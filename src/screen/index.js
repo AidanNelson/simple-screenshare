@@ -40,7 +40,7 @@ socket.on("streamEnded", (data) => {
 socket.on("ip", (data) => {
   ipAddress = data;
   console.log("ipAddress: ", ipAddress);
-  instructionsEl.innerText = `To share your screen point your browser window to https://${ipAddress}:3000`;
+  // instructionsEl.innerText = `To share your screen point your browser window to https://${ipAddress}:3000`;
 });
 
 socket.on("signal", (to, from, data) => {
